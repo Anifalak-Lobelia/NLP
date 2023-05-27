@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>话题内容</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <style>
+        .content-container {
+            float: right;
+            width: 80%;
+            margin-bottom: 20px;
+
+            opacity: 0;
+            animation-name: fadeIn;
+            animation-duration: 1s;
+            animation-fill-mode: forwards;
+        }
+        .content-box {
+            background-color: #f0f0f0;
+            padding: 10px;
+            margin-bottom: 5px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-height: 100px;
+        }
+        .content-box.expanded {
+            max-height: none;
+        }
+        .button-box {
+            background-color: #d0e0f0;
+            padding: 5px;
+        }
+        .title {
+            font-size: 1.5em;
+            text-align: center;
+            margin-bottom: 20px;
+            background-image: linear-gradient(to left, #553c9a, #b393d3);
+            color: transparent;
+            background-clip: text;
+            -webkit-background-clip: text;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+    <script>
+        $(document).ready(function() {
+            $('.content-box').each(function(index){
+                $(this).parent('.content-container').css("animation-delay", (0.3 * index) + "s");
+                if (this.scrollHeight > this.clientHeight){
+                    $(this).next('.button-box').children('.content-toggle').show();
+                }
+            });
+
+            $('.content-toggle').click(function(event) {
+                event.stopPropagation();
+                $(this).parent().prev('.content-box').toggleClass('expanded');
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="title">{{ question_title }}</div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4">
+                <h2>推荐的问题</h2>
+                <ul class="list-group">
+                    {% for question in similar_questions %}
+                        <li class="list-group-item" style="width: 130%;left: -140px">
+                            <a href="/topic/?question_title={{ question }}">{{ question }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <img src="{% static 'image/wordcloud.png' %}" alt="词云图" style="width: 165%; height: auto; margin-left: -200px">
+            </div>
+            <div class="col-md-8">
+                {% for item in content_list %}
+                    <div class="content-container" style="width: 100%">
+                        <div class="content-box">
+                            {{ item.content }}
+                        </div>
+                        <div class="button-box">
+                            <button onclick="location.href='/content_detail/?id={{ item.id }}'" class="btn btn-primary">详情</button>
+                            <button class="btn btn-primary content-toggle" style="display: none;">展开</button>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

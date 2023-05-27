@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Element UI 表格测试</title>
+    <!-- 引入Element UI样式表 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+<body>
+    <div id="app">
+        <h1>Element UI 表格测试</h1>
+        <el-table :data="tableData" border>
+            <el-table-column prop="name" label="姓名"></el-table-column>
+            <el-table-column prop="age" label="年龄"></el-table-column>
+            <el-table-column label="操作">
+                <template slot-scope="scope">
+                    <el-button @click="handleClick(scope.row)">点击</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+    </div>
+
+    <!-- 引入Vue.js和Element UI的JavaScript文件 -->
+    <script src="https://unpkg.com/vue@2.6.11/dist/vue.min.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data() {
+                return {
+                    tableData: [
+                        { name: '张三', age: 25 },
+                        { name: '李四', age: 30 },
+                        { name: '王五', age: 28 }
+                    ]
+                }
+            },
+            methods: {
+                handleClick(row) {
+                    alert('点击了 ' + row.name + ' 的按钮');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

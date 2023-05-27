@@ -1,0 +1,132 @@
+{%  load static %}
+{#21122924 刘育杰 智能科学与技术#}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>登录</title>
+  <style>
+    body {
+      background: url('https://img.pptjia.com/image/20200918/3f36896ce3ac5f3c2749faad8207337c.jpg') no-repeat;
+      background-size: 100% 110%;
+    }
+
+    #login_box {
+      width: 20%;
+      height: 400px;
+      background-color: #00000060;
+      margin: auto;
+      margin-top: 10%;
+      text-align: center;
+      border-radius: 10px;
+      padding: 50px 50px;
+    }
+
+    h2 {
+      color: #ffffff90;
+      margin-top: 5%;
+    }
+
+    #input-box {
+      margin-top: 5%;
+    }
+
+    span {
+      color: #fff;
+    }
+
+    input {
+      border: 0;
+      width: 60%;
+      font-size: 15px;
+      color: #fff;
+      background: transparent;
+      border-bottom: 2px solid #fff;
+      padding: 5px 10px;
+      outline: none;
+      margin-top: 10px;
+    }
+
+    button {
+      position: relative;
+      display: inline-block;
+      padding: 12px 36px;
+      margin: 10px 0;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      border-radius: 40px;
+      border: 0;
+      color: #fff;
+      overflow: hidden;
+      text-align: center;
+      font-size: 18px;
+      background-image: linear-gradient(to right, #30cfd0, #330867);
+    }
+
+    #sign_up {
+      margin-top: 45%;
+      margin-left: 60%;
+    }
+
+
+
+
+
+    span{
+      position: absolute;
+        background: #fff;
+      transform: translate(-50%,-50%);
+      pointer-events: none;
+        border-radius: 50%;
+        animation: animate 1s linear infinite;
+    }
+    @keyframes animate {
+        0%{
+            width: 0px;
+            height: 0px;
+            opacity: 0.5;
+        }
+        100%{
+            width: 50px;
+            height: 50px;
+        }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="login_box">
+    <h2>LOGIN</h2>
+      <form method="post" action="/">
+          {% csrf_token %}
+          <div class="input_box">
+            <input type="text" name="user" placeholder="请输入用户名">
+          </div>
+          <div class="input_box">
+            <input type="password" name="pwd" placeholder="请输入密码">
+          </div>
+          <button href="javascript:void(0);" class="button">登录</button>
+      </form>
+  </div>
+<script type="text/javascript">
+  const buttons = document.querySelectorAll('.button');
+  buttons.forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      let x = e.clientX - e.target.offsetLeft;
+      let y = e.clientY - e.target.offsetTop;
+      let ripples = document.createElement('span');
+      ripples.style.left = x + 'px';
+      ripples.style.top = y + 'px';
+      this.appendChild(ripples);
+      setTimeout(() => {
+        ripples.remove()
+      }, 1000);
+    })
+  })
+</script>
+</body>
+</html>
+

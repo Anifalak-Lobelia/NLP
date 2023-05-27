@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>搜索</title>
+    <!-- 引入Vue.js -->
+    <script src="https://unpkg.com/vue@2.7.0/dist/vue.js"></script>
+    <!-- 引入Element UI -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui@2.15.0/lib/theme-chalk/index.css">
+    <script src="https://unpkg.com/element-ui@2.15.0/lib/index.js"></script>
+    <style>
+        input[type="text"] {
+            width: 300px;
+            padding: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 5px 10px;
+            font-size: 16px;
+        }
+
+        .return-button {
+            position: fixed;
+            right: 10px;
+            bottom: 10px;
+        }
+
+        {#标题效果#}
+        .sliding-text {
+            font-family: 'Arial', sans-serif;
+            font-size: 40px;
+            text-align: center;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+            animation: slide 5s forwards;
+            color: #0a3d62; /* A dark, stylish blue */
+        }
+
+        .centered-content {
+            width: 60%; /* Adjust this value to suit your needs */
+            margin: 0 auto;
+        }
+
+        @keyframes slide {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(0%); }
+        }
+    </style>
+</head>
+<body>
+    <div class="centered-content">
+        <h1 class="sliding-text">语义搜索</h1>
+        <form method="POST" action="/search/">
+            {% csrf_token %}
+            <input type="text" id="searchText" name="search_text" placeholder="请输入搜索内容">
+            <button type="submit">搜索</button>
+        </form>
+
+        <h1>搜索结果</h1>
+        <div id="app">
+            <el-table :data="tableData" style="width: 150%" @row-click="handleRowClick">
+                <el-table-column
+                    prop="question_title"
+                    label="问题标题"
+                    width="580">
+                </el-table-column>
+            </el-table>
+        </div>
+    </div>
+
+    <button class="return-button" onclick="returnHome()">返回主页</button>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: function() {
+                return {
+                    tableData: {{ results|safe }}
+                }
+            },
+            methods: {
+                handleRowClick(row, column, event) {
+                    window.location.href = row.url;
+                }
+            }
+        })
+
+        function returnHome() {
+            window.location.href = "http://127.0.0.1:8000/home/?date=2023-05-10";
+        }
+    </script>
+</body>
+</html>

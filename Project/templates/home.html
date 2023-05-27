@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+{% load static %}
+{% load math_tags %}
+<html>
+<head>
+    <title>主页</title>
+    <!-- 加载一个日历控件 -->
+    <!-- 引入Vue.js -->
+    <script src="https://unpkg.com/vue@2.7.0/dist/vue.js"></script>
+    <!-- 引入Element UI -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui@2.15.0/lib/theme-chalk/index.css">
+    <script src="https://unpkg.com/element-ui@2.15.0/lib/index.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.5.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.2.2/echarts.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.2.2/echarts.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Monoton&display=swap" rel="stylesheet">
+
+    <style>
+    .question-title {
+        margin-bottom: 20px;
+        padding: 10px;
+        background-color: #f0f0f0;
+        border-radius: 5px;
+
+        opacity: 0;
+        animation-name: fadeIn;
+        animation-duration: 500ms;
+        animation-fill-mode: forwards;
+    }
+
+    @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+    }
+
+    .question-title a {
+        text-decoration: none;
+        color: #333;
+        font-weight: bold;
+    }
+
+
+    {#标题效果#}
+.sliding-text {
+    font-family: 'Arial', sans-serif;
+    font-size: 40px;
+    text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+    animation: slide 5s forwards;
+    color: #0a3d62; /* A dark, stylish blue */
+}
+
+@keyframes slide {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(0%); }
+}
+    </style>
+
+
+    <!-- 日期选择器 -->
+    <script>
+    $( function() {
+        $( "#datepicker" ).datepicker({
+            dateFormat: "yy-mm-dd",
+            onSelect: function(dateText, inst) {
+                window.location.href = "/home/?date=" + dateText;
+            }
+        });
+    } );
+    </script>
+</head>
+<body>
+    <div>
+        <h1 class="sliding-text">智慧舆云系统</h1>
+        <div style="display: flex;position: relative;left: 250px">
+            <div style="flex: 0 0 25%;">
+                <div id="datepicker"></div>
+                <!-- 饼图容器 -->
+                <div id="pie" style="height: 400px;"></div>
+            </div>
+            <div style="flex-grow: 1;">
+                <div id="datepicker"></div>
+                <div>
+                <div id="app">
+                    <el-table :data="tableData" style="width: 100%" @row-click="handleRowClick">
+                        <el-table-column
+                            prop="question_title"
+                            label="问题标题"
+                            width="580">
+                        </el-table-column>
+                    </el-table>
+                </div>
+
+                </div>
+                </div>
+            </div>
+        </div>
+
+    {#  圆环图  #}
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('pie'));
+        // 指定图表的配置项和数据
+        var class_data = [{'name': '时政', 'value': 565}, {'name': '娱乐', 'value': 1815}, {'name': '科技', 'value': 880}, {'name': '游戏', 'value': 220}, {'name': '财经', 'value': 45}, {'name': '家居', 'value': 425}, {'name': '社会', 'value': 365}, {'name': '股票', 'value': 280}, {'name': '教育', 'value': 380}, {'name': '房产', 'value': 60}, {'name': '时尚', 'value': 120}];
+        var option = {
+            title : {
+                text: '类别分布',
+                subtext: '',
+                left: 'center',
+                top: '16%' // 调整标题的垂直位置
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+                top: '20%',
+                align: 'left'
+            },
+            tooltip : {
+                trigger: 'item',
+                formatter: '{a} <br/>{b} : {c} ({d}%)'
+            },
+            series : [
+                {
+                    name: '类别',
+                    type: 'pie',
+                    radius : ['50%', '70%'],
+                    center: ['50%', '60%'],
+                    avoidLabelOverlap: false,
+                    label: {
+                        show: false,
+                        position: 'center'
+                    },
+                    labelLine: {
+                        show: false
+                    },
+                    data: class_data,
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        },
+                        label: {
+                          show: true,
+                          fontSize: '30',
+                          fontWeight: 'bold'
+                        }
+                    }
+                }
+            ]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
+    <script>
+    new Vue({
+      el: '#app',
+      data: function() {
+        return {
+          tableData: {{ data_list|safe }}
+        }
+      },
+      methods: {
+        handleRowClick(row, column, event) {
+            window.location.href = "/topic/?question_id=" + row.id;
+        }
+      }
+    })
+    </script>
+
+    <!-- 添加搜索按钮 -->
+    <button onclick="goToSearch()" style="position: absolute;top: 150px; right: 150px">搜索</button>
+
+    <script>
+    function goToSearch() {
+        window.location.href = "/search/";
+    }
+    </script>
+
+    </div>
+</body>
+</html>
